@@ -45,5 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+<key>NSCameraUsageDescription</key>
+<string>App-ul are nevoie de acces la camera pentru a face poze.</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>App-ul are nevoie de acces la galerie pentru a selecta imagini.</string>
+
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>App-ul are nevoie de acces pentru a salva imagini.</string>
+
 </dict>
 </plist>
