@@ -1,4 +1,4 @@
-part of '../widget/category/components/category_bloc.dart';
+part of 'category_bloc.dart';
 
 abstract class CategoryEvent {}
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nested/nested.dart';
 
-import 'pages/landing_page.dart';
+import 'features/categorii/data/models/category_model.dart';
+import 'features/categorii/presentation/bloc/category_bloc.dart';
+import 'pages/home.dart';
 import 'theme/theme.dart';
-import 'widget/category/components/category_bloc.dart';
-import 'widget/category/components/category_model.dart';
 
 void main() {
   runApp(
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
       title: 'Notite',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: const LandingPage(appTitle: appTitle),
+      home: const HomePage(appTitle: appTitle),
     );
   }
 }

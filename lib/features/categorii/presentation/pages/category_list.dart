@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'components/category_bloc.dart';
-import 'components/category_model.dart';
+import '../../data/models/category_model.dart';
+import '../bloc/category_bloc.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});
@@ -13,7 +12,7 @@ class CategoryList extends StatelessWidget {
       builder: (BuildContext context, CategoryState state) {
         if (state is CategoryLoaded) {
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: SizedBox(
               height: 50,
               child: ListView.builder(

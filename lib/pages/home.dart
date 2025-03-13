@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../features/categorii/presentation/pages/category_list.dart';
 import '../widget/avatar/avatar.dart';
-import '../widget/category/category_list.dart';
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.appTitle});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key, required this.appTitle});
   static const String route = '/';
 
   final String appTitle;
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
