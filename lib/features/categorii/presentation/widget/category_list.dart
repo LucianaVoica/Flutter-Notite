@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/category_model.dart';
+import '../../data/category_model.dart';
 import '../bloc/category_bloc.dart';
+import '../bloc/category_event.dart';
+import '../bloc/category_state.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});
@@ -10,40 +12,45 @@ class CategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (BuildContext context, CategoryState state) {
+        if (state is CategoryLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (state is CategoryLoaded) {
           return Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
               height: 50,
-              child: ListView.builder(
+              child: ListView.separated(
                 scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 itemCount: state.categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (BuildContext context, int index) {
                   final Category category = state.categories[index];
                   return GestureDetector(
                     onTap: () {
                       context.read<CategoryBloc>().add(
-                        SelectCategory(categoryId: category.id),
+                        SelectCategory(category.id),
                       );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      margin: const EdgeInsets.symmetric(horizontal: 6),
                       decoration: BoxDecoration(
                         color:
                             category.isSelected
-                                ? Colors.purple.shade300
-                                : Colors.grey.shade200,
+                                ? Colors.deepPurpleAccent
+                                : Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         category.name,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        style: TextStyle(
                           color:
                               category.isSelected ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -53,7 +60,7 @@ class CategoryList extends StatelessWidget {
             ),
           );
         }
-        return const Center(child: CircularProgressIndicator());
+        return const SizedBox();
       },
     );
   }

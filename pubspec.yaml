@@ -37,6 +37,11 @@ dependencies:
   flutter_bloc: ^9.1.0
   image_picker: ^1.1.2
   nested: ^1.0.0
+  equatable: ^2.0.7
+  supabase_flutter: ^0.2.9
+  postgrest: ^0.1.11
+  
+  
 
 dev_dependencies:
   flutter_test:

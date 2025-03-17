@@ -1,11 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/category_model.dart';
-
-part 'category_event.dart';
-part 'category_state.dart';
+import '../../data/category_model.dart';
+import 'category_event.dart';
+import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  CategoryBloc() : super(CategoryInitial()) {
+  CategoryBloc() : super(CategoryLoading()) {
     on<LoadCategories>(_onLoadCategories);
     on<SelectCategory>(_onSelectCategory);
     on<AddCategory>(_onAddCategory);
@@ -27,7 +26,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  void _onAddCategory(AddCategory event, Emitter<CategoryState> emit) {
+  Future<void> _onAddCategory(
+    AddCategory event,
+    Emitter<CategoryState> emit,
+  ) async {
     if (state is CategoryLoaded) {
       final List<Category> updatedCategories = List<Category>.from(
         (state as CategoryLoaded).categories,
