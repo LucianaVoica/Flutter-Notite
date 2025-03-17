@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.secondaryLight,
+    scaffoldBackgroundColor: AppColors.primaryLight,
     primaryColor: AppColors.primaryLight,
     textTheme: const TextTheme(
       displaySmall: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),

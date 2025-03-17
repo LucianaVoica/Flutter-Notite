@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../theme/app_colors.dart';
 import '../../data/category_model.dart';
 import '../bloc/category_bloc.dart';
 import '../bloc/category_event.dart';

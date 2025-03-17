@@ -5,6 +5,7 @@ import 'features/categorii/data/category_model.dart';
 import 'features/categorii/presentation/bloc/category_bloc.dart';
 import 'features/categorii/presentation/bloc/category_event.dart';
 import 'pages/home.dart';
+import 'theme/gradient.dart';
 import 'theme/theme.dart';
 
 void main() {
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Notite',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const HomePage(appTitle: 'My Notes'),
+        home: const GradientBackground(child: HomePage(appTitle: 'My Notes')),
       ),
     );
   }
