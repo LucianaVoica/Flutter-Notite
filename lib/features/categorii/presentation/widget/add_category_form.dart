@@ -14,6 +14,7 @@ class AddCategoryForm extends StatefulWidget {
 
 class AddCategoryFormState extends State<AddCategoryForm> {
   final TextEditingController _controller = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   void _addCategory() {
     if (_controller.text.isNotEmpty) {
@@ -32,20 +33,29 @@ class AddCategoryFormState extends State<AddCategoryForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        TextField(
-          controller: _controller,
-          decoration: const InputDecoration(
-            labelText: 'Nume categorie',
-            border: OutlineInputBorder(),
+    return Form(
+      key: formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text('Adauga categorie', style: TextStyle(fontSize: 20)),
+          const SizedBox(height: 10),
+          TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              labelText: 'Nume categorie',
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(onPressed: _addCategory, child: const Text('Adaugă')),
-        const SizedBox(height: 10),
-      ],
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: _addCategory,
+            style: Theme.of(context).elevatedButtonTheme.style,
+            child: const Text('Adaugă'),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
     );
   }
 }

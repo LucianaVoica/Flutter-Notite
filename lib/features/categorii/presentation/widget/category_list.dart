@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../theme/app_colors.dart';
 import '../../data/category_model.dart';
 import '../bloc/category_bloc.dart';
 import '../bloc/category_event.dart';
@@ -17,7 +18,7 @@ class CategoryList extends StatelessWidget {
         }
         if (state is CategoryLoaded) {
           return Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
             child: SizedBox(
               height: 50,
               child: ListView.separated(
@@ -36,21 +37,34 @@ class CategoryList extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 8,
+                        vertical: 12,
                       ),
                       decoration: BoxDecoration(
                         color:
                             category.isSelected
-                                ? Colors.deepPurpleAccent
-                                : Colors.grey.shade300,
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 1.5,
+                        ),
                       ),
-                      child: Text(
-                        category.name,
-                        style: TextStyle(
-                          color:
-                              category.isSelected ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Text(
+                          category.name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color:
+                                category.isSelected
+                                    ? Colors.black
+                                    : Colors.black87,
+                            fontWeight:
+                                category.isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.w600,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),

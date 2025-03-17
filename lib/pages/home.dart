@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void _showAddCategoryModal(BuildContext context) {
     showModalBottomSheet(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
       ),
       builder: (BuildContext context) {
         return SizedBox(
-          height: 800,
+          height: 250,
           child: Padding(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           widget.appTitle,
@@ -49,6 +51,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
         actions: const <Widget>[Avatar()],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: const Column(
         children: <Widget>[
@@ -58,9 +61,9 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddCategoryModal(context),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: const Color.fromARGB(222, 161, 217, 145),
         shape: const CircleBorder(),
-        child: const Icon(Icons.add, size: 30, color: Colors.white),
+        child: const Icon(Icons.add, size: 30, color: Colors.black),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
