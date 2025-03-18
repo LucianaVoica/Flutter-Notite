@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color primaryLight = Color.fromARGB(222, 161, 217, 145);
-  static const Color secondaryLight = Color(0xFFF7E7CE);
+  static const Color secondaryLight = Color.fromARGB(255, 248, 242, 234);
   static const Color textLight = Colors.black;
   static const Color buttonBackgroundLight = Colors.grey;
   static const Color borderLight = Colors.black;

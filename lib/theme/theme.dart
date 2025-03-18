@@ -7,6 +7,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.secondaryLight,
     primaryColor: AppColors.primaryLight,
     textTheme: const TextTheme(
+      displayMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       displaySmall: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
       titleLarge: TextStyle(
         fontSize: 45,

@@ -24,7 +24,7 @@ class Category extends StatelessWidget {
           category.name,
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: category.isSelected ? Colors.black : Colors.black87,
+            color: category.isSelected ? Colors.white : Colors.black87,
             fontWeight: category.isSelected ? FontWeight.bold : FontWeight.w600,
             fontSize: 16,
           ),
