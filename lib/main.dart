@@ -9,11 +9,11 @@ import 'theme/gradient.dart';
 import 'theme/theme.dart';
 
 void main() {
-  final List<Category> initialCategories = <Category>[
-    Category(id: '1', name: 'All', isSelected: true),
-    Category(id: '2', name: 'Pinned', isSelected: false),
-    Category(id: '3', name: 'Work', isSelected: false),
-    Category(id: '4', name: 'Personal', isSelected: false),
+  final List<CategoryModel> initialCategories = <CategoryModel>[
+    CategoryModel(id: '1', name: 'All', isSelected: true),
+    CategoryModel(id: '2', name: 'Pinned', isSelected: false),
+    CategoryModel(id: '3', name: 'Work', isSelected: false),
+    CategoryModel(id: '4', name: 'Personal', isSelected: false),
   ];
 
   runApp(MyApp(categories: initialCategories));
@@ -21,7 +21,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.categories});
-  final List<Category> categories;
+  final List<CategoryModel> categories;
 
   @override
   Widget build(BuildContext context) {

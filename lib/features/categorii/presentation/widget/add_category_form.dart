@@ -20,7 +20,7 @@ class AddCategoryFormState extends State<AddCategoryForm> {
     if (_controller.text.isNotEmpty) {
       context.read<CategoryBloc>().add(
         AddCategory(
-          category: Category(
+          category: CategoryModel(
             id: UniqueKey().toString(),
             name: _controller.text,
             isSelected: false,
@@ -38,7 +38,7 @@ class AddCategoryFormState extends State<AddCategoryForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('Adauga categorie', style: TextStyle(fontSize: 20)),
+          const Text('Adaugă categorie', style: TextStyle(fontSize: 20)),
           const SizedBox(height: 10),
           TextField(
             controller: _controller,

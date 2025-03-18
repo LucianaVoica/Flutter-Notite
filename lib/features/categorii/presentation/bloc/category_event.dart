@@ -8,7 +8,7 @@ abstract class CategoryEvent extends Equatable {
 
 class LoadCategories extends CategoryEvent {
   LoadCategories({required this.categories});
-  final List<Category> categories;
+  final List<CategoryModel> categories;
 
   @override
   List<Object?> get props => <Object?>[categories];
@@ -21,7 +21,7 @@ class SelectCategory extends CategoryEvent {
 
 class AddCategory extends CategoryEvent {
   AddCategory({required this.category});
-  final Category category;
+  final CategoryModel category;
 
   @override
   List<Object?> get props => <Object?>[category];

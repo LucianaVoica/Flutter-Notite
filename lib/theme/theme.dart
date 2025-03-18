@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.primaryLight,
+    scaffoldBackgroundColor: AppColors.secondaryLight,
     primaryColor: AppColors.primaryLight,
     textTheme: const TextTheme(
       displaySmall: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
@@ -17,7 +17,7 @@ class AppTheme {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.secondaryLight,
+        backgroundColor: AppColors.primaryLight,
         foregroundColor: Colors.black,
         fixedSize: const Size(130, 50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

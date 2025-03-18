@@ -10,7 +10,7 @@ class CategoryLoading extends CategoryState {}
 
 class CategoryLoaded extends CategoryState {
   CategoryLoaded({required this.categories});
-  final List<Category> categories;
+  final List<CategoryModel> categories;
 
   @override
   List<Object?> get props => <Object?>[categories];

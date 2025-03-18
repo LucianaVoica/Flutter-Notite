@@ -16,8 +16,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
   void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
     if (state is CategoryLoaded) {
-      final List<Category> updatedCategories =
-          (state as CategoryLoaded).categories.map((Category category) {
+      final List<CategoryModel> updatedCategories =
+          (state as CategoryLoaded).categories.map((CategoryModel category) {
             return category.id == event.categoryId
                 ? category.copyWith(isSelected: true)
                 : category.copyWith(isSelected: false);
@@ -31,7 +31,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     Emitter<CategoryState> emit,
   ) async {
     if (state is CategoryLoaded) {
-      final List<Category> updatedCategories = List<Category>.from(
+      final List<CategoryModel> updatedCategories = List<CategoryModel>.from(
         (state as CategoryLoaded).categories,
       )..add(event.category);
       emit(CategoryLoaded(categories: updatedCategories));

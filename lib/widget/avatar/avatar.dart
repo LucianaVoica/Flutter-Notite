@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../theme/app_colors.dart';
+
 class Avatar extends StatefulWidget {
   const Avatar({super.key});
 
@@ -27,6 +29,7 @@ class _AvatarState extends State<Avatar> {
   void showImage() {
     showModalBottomSheet(
       context: context,
+      backgroundColor: AppColors.secondaryLight,
       builder: (BuildContext context) {
         return Wrap(
           children: <Widget>[
