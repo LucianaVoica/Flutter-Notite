@@ -34,6 +34,7 @@ class PinnedNotesCard extends StatelessWidget {
                   'Pinned',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
+
                 Spacer(),
                 Icon(Icons.push_pin),
               ],

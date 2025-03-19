@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 import '../features/categorii/presentation/widget/add_category_form.dart';
 import '../features/categorii/presentation/widget/category_list.dart';
-import '../features/home/calendar.dart';
 import '../features/home/pinned_notes.dart';
 import '../theme/app_colors.dart';
 import '../theme/gradient.dart';
 import '../widget/avatar/avatar.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.appTitle});
+  const LandingPage({super.key});
   static const String route = '/';
-
-  final String appTitle;
 
   @override
   State<LandingPage> createState() => _LandingPageState();
@@ -50,65 +49,54 @@ class _LandingPageState extends State<LandingPage> {
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: AppColors.secondaryLight,
-        title: Row(
-          children: <Widget>[
-            const Avatar(),
-            Text('Hi, Luci', style: Theme.of(context).textTheme.titleSmall),
-          ],
+        title: const Text(
+          'My Notes ',
+          style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.add, size: 30),
-                onPressed: () => _showAddCategoryModal(context),
-                color: Colors.black,
-              ),
-            ],
-          ),
+          Text('Hi, Luci ', style: Theme.of(context).textTheme.titleSmall),
+          const Avatar(),
         ],
       ),
-      body: const GradientBackground(
+      body: GradientBackground(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            const CategoryList(),
             Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'My',
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    'Notes',
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              padding: const EdgeInsets.all(16.0),
+              child: SfCalendar(
+                headerStyle: const CalendarHeaderStyle(
+                  backgroundColor: AppColors.primaryLight,
+                ),
+                view: CalendarView.month,
               ),
             ),
-            CategoryList(),
-            CalendarCard(),
-            PinnedNotesCard(
+            const PinnedNotesCard(
               pinnedNotes: <String>[
                 'Note 1',
                 'Important Note',
                 'Remember this',
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: IconButton(
+                icon: const Icon(Icons.folder, size: 50),
+                onPressed: () => _showAddCategoryModal(context),
+                color: AppColors.primaryLight,
+              ),
+            ),
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   shape: const CircleBorder(),
-      //   child: const Icon(Icons.add, size: 30, color: Colors.black),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddCategoryModal,
+        backgroundColor: Theme.of(context).primaryColor,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, size: 30, color: Colors.black),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

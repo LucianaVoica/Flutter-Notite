@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../services/supabase_service.dart';
 import '../../data/category_model.dart';
 import 'category_event.dart';
 import 'category_state.dart';
@@ -6,23 +8,29 @@ import 'category_state.dart';
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
     on<LoadCategories>(_onLoadCategories);
-    on<SelectCategory>(_onSelectCategory);
     on<AddCategory>(_onAddCategory);
   }
 
-  void _onLoadCategories(LoadCategories event, Emitter<CategoryState> emit) {
-    emit(CategoryLoaded(categories: event.categories));
-  }
+  Future<void> _onLoadCategories(
+    LoadCategories event,
+    Emitter<CategoryState> emit,
+  ) async {
+    try {
+      final List<Map<String, dynamic>> categoriesData =
+          await SupabaseService.supabaseClient.from('categories').select();
 
-  void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
-    if (state is CategoryLoaded) {
-      final List<CategoryModel> updatedCategories =
-          (state as CategoryLoaded).categories.map((CategoryModel category) {
-            return category.id == event.categoryId
-                ? category.copyWith(isSelected: true)
-                : category.copyWith(isSelected: false);
+      final List<CategoryModel> categories =
+          categoriesData.map((Map<String, dynamic> category) {
+            return CategoryModel(
+              id: category['id'].toString(),
+              name: category['name'].toString(),
+              isSelected: false,
+            );
           }).toList();
-      emit(CategoryLoaded(categories: updatedCategories));
+
+      emit(CategoryLoaded(categories: categories));
+    } catch (error) {
+      emit(CategoryFailure(error: error.toString()));
     }
   }
 
@@ -30,11 +38,18 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     AddCategory event,
     Emitter<CategoryState> emit,
   ) async {
-    if (state is CategoryLoaded) {
+    try {
+      await SupabaseService.supabaseClient.from('categories').insert(
+        <String, Object>{'name': event.category.name, 'is_default': false},
+      );
+
       final List<CategoryModel> updatedCategories = List<CategoryModel>.from(
         (state as CategoryLoaded).categories,
       )..add(event.category);
+
       emit(CategoryLoaded(categories: updatedCategories));
+    } catch (error) {
+      emit(CategoryFailure(error: error.toString()));
     }
   }
 }
