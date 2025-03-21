@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../features/categorii/data/category_model.dart';
+import '../features/categorii/presentation/bloc/category_bloc.dart';
+import '../features/categorii/presentation/bloc/category_event.dart';
 import '../features/categorii/presentation/widget/add_category_form.dart';
 import '../features/categorii/presentation/widget/category_list.dart';
 import '../features/home/pinned_notes.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/gradient.dart';
 import '../widget/avatar/avatar.dart';
@@ -17,6 +22,14 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CategoryBloc>().add(
+      LoadCategories(categories: const <CategoryModel>[]),
+    );
+  }
+
   void _showAddCategoryModal(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -91,7 +104,10 @@ class _LandingPageState extends State<LandingPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddCategoryModal,
+        onPressed:
+            () => _showAddCategoryModal(
+              context,
+            ), //! TODO - de pus adaugarea de notite cu hero
         backgroundColor: Theme.of(context).primaryColor,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 30, color: Colors.black),

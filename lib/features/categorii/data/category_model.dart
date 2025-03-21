@@ -4,6 +4,13 @@ class CategoryModel {
     required this.name,
     required this.isSelected,
   });
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      isSelected: false,
+    );
+  }
 
   final String id;
   final String name;
@@ -15,5 +22,9 @@ class CategoryModel {
       name: name ?? this.name,
       isSelected: isSelected ?? this.isSelected,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{'id': id, 'name': name};
   }
 }

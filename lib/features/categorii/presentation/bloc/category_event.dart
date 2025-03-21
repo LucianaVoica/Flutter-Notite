@@ -17,6 +17,9 @@ class LoadCategories extends CategoryEvent {
 class SelectCategory extends CategoryEvent {
   SelectCategory(this.categoryId);
   final String categoryId;
+
+  @override
+  List<Object?> get props => <Object?>[categoryId];
 }
 
 class AddCategory extends CategoryEvent {

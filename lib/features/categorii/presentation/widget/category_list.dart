@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../notite/presentation/pages/lista_notite.dart';
 import '../../data/category_model.dart';
 import '../bloc/category_bloc.dart';
-import '../bloc/category_event.dart';
 import '../bloc/category_state.dart';
 import 'category.dart';
 
@@ -33,9 +33,9 @@ class CategoryList extends StatelessWidget {
                       final CategoryModel category = state.categories[index];
                       return GestureDetector(
                         onTap: () {
-                          context.read<CategoryBloc>().add(
-                            SelectCategory(category.id),
-                          );
+                          Navigator.of(
+                            context,
+                          ).push(ListaNotite.route(categoryType: category.id));
                         },
                         child: Category(category: category),
                       );

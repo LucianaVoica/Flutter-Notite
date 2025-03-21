@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../services/supabase_service.dart';
@@ -9,6 +10,25 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
     on<LoadCategories>(_onLoadCategories);
     on<AddCategory>(_onAddCategory);
+    on<SelectCategory>(_onSelectCategory);
+  }
+
+  void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
+    if (state is! CategoryLoaded) {
+      return;
+    }
+
+    final List<CategoryModel> updatedCategories =
+        (state as CategoryLoaded).categories.map((CategoryModel category) {
+          return category.id == event.categoryId
+              ? category.copyWith(isSelected: true)
+              : category.copyWith(isSelected: false);
+        }).toList();
+
+    debugPrint('Categorie selectată: ${event.categoryId}');
+
+    emit(CategoryLoaded(categories: updatedCategories));
+    emit(CategorySelected(categoryId: event.categoryId)); // Navigare
   }
 
   Future<void> _onLoadCategories(
@@ -31,6 +51,16 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emit(CategoryLoaded(categories: categories));
     } catch (error) {
       emit(CategoryFailure(error: error.toString()));
+    }
+  }
+
+  @override
+  Future<void> onTransition(
+    Transition<CategoryEvent, CategoryState> transition,
+  ) async {
+    super.onTransition(transition);
+    if (transition.nextState is CategoryFailure) {
+      add(LoadCategories(categories: const <CategoryModel>[]));
     }
   }
 
