@@ -9,11 +9,11 @@ import '../widget/note.dart';
 class ListaNotite extends StatelessWidget {
   const ListaNotite({super.key, required this.categoryType});
 
-  static MaterialPageRoute<dynamic> route({String categoryType = 'All'}) =>
-      MaterialPageRoute<dynamic>(
-        builder:
-            (BuildContext context) => ListaNotite(categoryType: categoryType),
-      );
+  static MaterialPageRoute<dynamic> route({
+    String categoryType = '00000000-0000-0000-0000-000000000001',
+  }) => MaterialPageRoute<dynamic>(
+    builder: (BuildContext context) => ListaNotite(categoryType: categoryType),
+  );
 
   final String categoryType;
 
@@ -25,6 +25,8 @@ class ListaNotite extends StatelessWidget {
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (BuildContext context, NoteState state) {
           if (state is NoteLoading) {
+            print(state);
+            print(categoryType);
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -60,7 +62,6 @@ class ListaNotite extends StatelessWidget {
             );
           }
 
-          // În cazul în care starea nu este nici NoteLoading, nici NoteLoaded
           return const Center(
             child: Text(
               'Eroare la încărcarea notițelor',

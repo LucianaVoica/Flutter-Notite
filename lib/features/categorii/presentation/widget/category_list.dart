@@ -33,9 +33,10 @@ class CategoryList extends StatelessWidget {
                       final CategoryModel category = state.categories[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(
+                          Navigator.push(
                             context,
-                          ).push(ListaNotite.route(categoryType: category.id));
+                            ListaNotite.route(categoryType: category.id),
+                          );
                         },
                         child: Category(category: category),
                       );
