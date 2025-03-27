@@ -5,10 +5,12 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../features/categorii/data/category_model.dart';
 import '../features/categorii/presentation/bloc/category_bloc.dart';
 import '../features/categorii/presentation/bloc/category_event.dart';
+import '../features/categorii/presentation/bloc/category_state.dart';
 import '../features/categorii/presentation/widget/add_category_form.dart';
 import '../features/categorii/presentation/widget/category_list.dart';
 import '../features/home/pinned_notes.dart';
 
+import '../features/notite/presentation/widget/add_note_form.dart';
 import '../theme/app_colors.dart';
 import '../theme/gradient.dart';
 import '../widget/avatar/avatar.dart';
@@ -53,6 +55,24 @@ class _LandingPageState extends State<LandingPage> {
         );
       },
     );
+  }
+
+  void _navigateToAddNote() {
+    final CategoryState state = context.read<CategoryBloc>().state;
+    if (state is CategoryLoaded) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder:
+              (BuildContext context) =>
+                  Scaffold(body: AddNoteForm(categories: state.categories)),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Se încarcă categoriile...')),
+      );
+    }
   }
 
   @override
@@ -103,14 +123,12 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
-        onPressed:
-            () => _showAddCategoryModal(
-              context,
-            ), //! TODO - de pus adaugarea de notite cu hero
-        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () => _navigateToAddNote(),
+        backgroundColor: Colors.black,
         shape: const CircleBorder(),
-        child: const Icon(Icons.add, size: 30, color: Colors.black),
+        child: const Icon(Icons.add, size: 30, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

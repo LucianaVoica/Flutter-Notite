@@ -18,7 +18,7 @@ class PinnedNotesCard extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: <Color>[
-              Color.fromARGB(222, 198, 236, 187),
+              Color.fromARGB(255, 244, 227, 206),
               AppColors.primaryLight,
             ],
           ),

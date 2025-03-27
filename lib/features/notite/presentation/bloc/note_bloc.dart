@@ -17,7 +17,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
           .supabaseClient
           .from('notes')
           .select()
-          .eq('category_id', event.categoryId); // Filtrare pe categorie
+          .eq('category_id', event.categoryId);
 
       final List<NoteModel> notes =
           notesData.map((Map<String, dynamic> note) {
@@ -44,6 +44,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       };
 
       await SupabaseService.supabaseClient.from('notes').insert(newNote);
+      print('📌 Bloc a primit evenimentul AddNote: ${event.note.title}');
 
       final List<NoteModel> updatedNotes = List<NoteModel>.from(
         (state is NoteLoaded) ? (state as NoteLoaded).notes : <dynamic>[],
@@ -53,5 +54,6 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     } catch (error) {
       emit(NoteFailure(error: error.toString()));
     }
+    print('✅ Notița a fost adăugată cu succes!');
   }
 }

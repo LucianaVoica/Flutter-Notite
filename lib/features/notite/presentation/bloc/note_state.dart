@@ -4,12 +4,14 @@ import '../../data/model/note_model.dart';
 abstract class NoteState extends Equatable {
   @override
   List<Object?> get props => <Object?>[];
+  void get notes {}
 }
 
 class NoteLoading extends NoteState {}
 
 class NoteLoaded extends NoteState {
   NoteLoaded({required this.notes});
+  @override
   final List<NoteModel> notes;
 
   @override

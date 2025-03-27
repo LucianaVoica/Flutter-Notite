@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../theme/app_colors.dart';
 import '../../data/model/note_model.dart';
 import '../bloc/note_bloc.dart';
+import '../bloc/note_event.dart';
 import '../bloc/note_state.dart';
 import '../widget/note.dart';
 
@@ -19,14 +20,14 @@ class ListaNotite extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<NoteBloc>().add(LoadNotes(categoryId: categoryType));
+
     return Scaffold(
       backgroundColor: AppColors.secondaryLight,
       appBar: AppBar(backgroundColor: AppColors.secondaryLight),
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (BuildContext context, NoteState state) {
           if (state is NoteLoading) {
-            print(state);
-            print(categoryType);
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -40,25 +41,13 @@ class ListaNotite extends StatelessWidget {
               );
             }
 
-            return Padding(
+            return ListView.builder(
               padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 200,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      itemCount: state.notes.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                      itemBuilder: (BuildContext context, int index) {
-                        final NoteModel note = state.notes[index];
-                        return GestureDetector(child: Note(note: note));
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              itemCount: state.notes.length,
+              itemBuilder: (BuildContext context, int index) {
+                final NoteModel note = state.notes[index];
+                return Note(note: note);
+              },
             );
           }
 

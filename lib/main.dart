@@ -8,6 +8,7 @@ import 'features/categorii/data/category_model.dart';
 import 'features/categorii/presentation/bloc/category_bloc.dart';
 import 'features/categorii/presentation/bloc/category_event.dart';
 import 'features/notite/presentation/bloc/note_bloc.dart';
+import 'features/notite/presentation/bloc/note_event.dart';
 import 'pages/landin_page.dart';
 import 'services/locator.dart';
 import 'services/supabase_service.dart';
@@ -35,7 +36,17 @@ class MyApp extends StatelessWidget {
                   CategoryBloc()
                     ..add(LoadCategories(categories: const <CategoryModel>[])),
         ),
-        BlocProvider(create: (_) => NoteBloc()),
+        BlocProvider(
+          create:
+              (context) =>
+                  NoteBloc()..add(
+                    LoadNotes(
+                      categoryId: '00000000-0000-0000-0000-000000000001',
+                    ),
+                  ),
+        ),
+
+        BlocProvider<NoteBloc>(create: (BuildContext context) => NoteBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

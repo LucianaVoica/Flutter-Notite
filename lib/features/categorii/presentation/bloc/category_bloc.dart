@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../services/supabase_service.dart';
+import '../../../notite/presentation/bloc/note_bloc.dart';
+import '../../../notite/presentation/bloc/note_event.dart';
 import '../../data/category_model.dart';
 import 'category_event.dart';
 import 'category_state.dart';
@@ -28,7 +30,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     debugPrint('Categorie selectată: ${event.categoryId}');
 
     emit(CategoryLoaded(categories: updatedCategories));
-    emit(CategorySelected(categoryId: event.categoryId)); // Navigare
+    emit(CategorySelected(categoryId: event.categoryId));
+
+    // Declanșează încărcarea notițelor pentru categoria selectată
+    final NoteBloc noteBloc = BlocProvider.of<NoteBloc>(event.context);
+    noteBloc.add(LoadNotes(categoryId: event.categoryId));
   }
 
   Future<void> _onLoadCategories(
