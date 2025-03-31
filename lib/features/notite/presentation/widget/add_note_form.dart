@@ -7,13 +7,17 @@ import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';
 
 class AddNoteForm extends StatefulWidget {
-  const AddNoteForm({super.key, required this.categories});
+  const AddNoteForm({super.key, required this.categories, this.note});
   final List<CategoryModel> categories;
+  final NoteModel? note;
 
   static MaterialPageRoute<dynamic> route({
     required List<CategoryModel> categories,
+    NoteModel? note,
   }) => MaterialPageRoute<dynamic>(
-    builder: (BuildContext context) => AddNoteForm(categories: categories),
+    builder:
+        (BuildContext context) =>
+            AddNoteForm(categories: categories, note: note),
   );
 
   @override
@@ -21,32 +25,48 @@ class AddNoteForm extends StatefulWidget {
 }
 
 class _AddNoteFormState extends State<AddNoteForm> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
 
   final FocusNode _contentFocusNode = FocusNode();
 
   String? selectedCategoryId;
 
-  void _addNote() {
-    context.read<NoteBloc>().add(
-      AddNote(
-        note: NoteModel(
-          id: UniqueKey().toString(),
-          title: _titleController.text,
-          content: _contentController.text,
-          categoryId:
-              selectedCategoryId ?? '00000000-0000-0000-0000-000000000001',
-        ),
-      ),
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController = TextEditingController(text: widget.note?.title ?? '');
+    _contentController = TextEditingController(
+      text: widget.note?.content ?? '',
     );
+    selectedCategoryId =
+        widget.note?.categoryId ?? '00000000-0000-0000-0000-000000000001';
+  }
+
+  void _saveNote() {
+    final NoteModel note = NoteModel(
+      id: widget.note?.id ?? UniqueKey().toString(),
+      title: _titleController.text,
+      content: _contentController.text,
+      categoryId: selectedCategoryId!,
+    );
+
+    if (widget.note == null) {
+      // Adăugare notiță nouă
+      context.read<NoteBloc>().add(AddNote(note: note));
+    } else {
+      // Editare notiță existentă
+      context.read<NoteBloc>().add(UpdateNote(note: note));
+    }
+
     Navigator.pop(context);
   }
 
   void _showCategoryDialog() {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -64,7 +84,6 @@ class _AddNoteFormState extends State<AddNoteForm> {
                 const SizedBox(height: 20),
                 DropdownButton<String>(
                   isExpanded: true,
-                  hint: const Text('Categorie'),
                   value: selectedCategoryId,
                   items:
                       widget.categories.map((CategoryModel category) {
@@ -83,15 +102,10 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   iconSize: 30,
                   iconEnabledColor: Colors.black,
                 ),
-
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    if (selectedCategoryId != null) {
-                      Navigator.pop(context); // Închide dialogul
-                    } else {
-                      // Optional: poți adăuga un mesaj de eroare aici
-                    }
+                    Navigator.pop(context);
                   },
                   child: const Text('Confirmă'),
                 ),
@@ -101,6 +115,31 @@ class _AddNoteFormState extends State<AddNoteForm> {
         );
       },
     );
+  }
+
+  Color _getCategoryColor(String? categoryId) {
+    if (categoryId == '00000000-0000-0000-0000-000000000001') {
+      return Colors.cyanAccent;
+    }
+
+    final List<Color> vibrantColors = [
+      Colors.redAccent,
+      Colors.orangeAccent,
+      Colors.amberAccent,
+      Colors.greenAccent,
+      Colors.blueAccent,
+      Colors.purpleAccent,
+      Colors.pinkAccent,
+    ];
+
+    final int index = widget.categories.indexWhere(
+      (CategoryModel category) => category.id == categoryId,
+    );
+    if (index == -1) {
+      return Colors.cyanAccent;
+    }
+
+    return vibrantColors[index % vibrantColors.length];
   }
 
   @override
@@ -124,7 +163,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
               radius: 20,
               child: Icon(Icons.check, color: Colors.white),
             ),
-            onPressed: _addNote,
+            onPressed: _saveNote,
           ),
         ],
       ),
@@ -137,8 +176,42 @@ class _AddNoteFormState extends State<AddNoteForm> {
               'Nota',
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-
+            const SizedBox(height: 10),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 16,
+                  height: 16,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _getCategoryColor(selectedCategoryId),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  selectedCategoryId == null
+                      ? 'All'
+                      : widget.categories
+                          .firstWhere(
+                            (CategoryModel category) =>
+                                category.id == selectedCategoryId,
+                            orElse:
+                                () => CategoryModel(
+                                  id: '',
+                                  name: 'All',
+                                  isSelected: false,
+                                ),
+                          )
+                          .name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
+
             Container(
               height: 60,
               width: 180,
@@ -198,7 +271,6 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   fillColor: Color.fromARGB(255, 236, 197, 147),
                 ),
                 onFieldSubmitted: (_) {
-                  // Când apesi Enter, focusul trece la câmpul de conținut
                   FocusScope.of(context).requestFocus(_contentFocusNode);
                 },
               ),

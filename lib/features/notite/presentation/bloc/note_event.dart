@@ -22,3 +22,17 @@ class AddNote extends NoteEvent {
   @override
   List<Object?> get props => <Object?>[note];
 }
+
+class UpdateNote extends NoteEvent {
+  UpdateNote({required this.note});
+  final NoteModel note;
+
+  @override
+  List<Object?> get props => <Object?>[note];
+}
+
+class DeleteNote extends NoteEvent {
+  DeleteNote({required this.noteId});
+
+  final String noteId;
+}

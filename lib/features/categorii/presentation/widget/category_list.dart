@@ -35,7 +35,10 @@ class CategoryList extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            ListaNotite.route(categoryType: category.id),
+                            ListaNotite.route(
+                              categoryType: category.id,
+                              categories: state.categories,
+                            ),
                           );
                         },
                         child: Category(category: category),
