@@ -42,7 +42,13 @@ dependencies:
   postgrest: ^2.4.1
   intl: ^0.20.2
   syncfusion_flutter_calendar: ^28.2.12
+  get_it: ^8.0.3
+  heroine: ^0.4.0+1
   flutter_dotenv: ^5.2.1
+  modal_bottom_sheet: ^3.0.0
+  dropdown_button2: ^2.3.9
+  flutter_animate: ^4.5.2
+  font_awesome_flutter: ^10.8.0
   
 
 dev_dependencies:

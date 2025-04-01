@@ -1,14 +1,42 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../services/supabase_service.dart';
-import '../../data/category_model.dart';
+import '../../../../core/services/supabase_service.dart';
+import '../../../notite/presentation/bloc/note_bloc.dart';
+import '../../../notite/presentation/bloc/note_event.dart';
+import '../../data/models/category_model.dart';
 import 'category_event.dart';
 import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
+    on<CategoryEvent>((CategoryEvent event, Emitter<CategoryState> emit) {
+      emit(CategoryLoading());
+    });
     on<LoadCategories>(_onLoadCategories);
-    on<AddCategory>(_onAddCategory);
+    on<AddCategory>(_onInsertOrUpdate);
+    on<SelectCategory>(_onSelectCategory);
+  }
+
+  void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
+    if (state is! CategoryLoaded) {
+      return;
+    }
+
+    final List<CategoryModel> updatedCategories =
+        (state as CategoryLoaded).categories.map((CategoryModel category) {
+          return category.id == event.categoryId
+              ? category.copyWith(isSelected: true)
+              : category.copyWith(isSelected: false);
+        }).toList();
+
+    debugPrint('Categorie selectată: ${event.categoryId}');
+
+    emit(CategoryLoaded(categories: updatedCategories));
+    emit(CategorySelected(categoryId: event.categoryId));
+
+    final NoteBloc noteBloc = BlocProvider.of<NoteBloc>(event.context);
+    noteBloc.add(LoadNotes(categoryId: event.categoryId));
   }
 
   Future<void> _onLoadCategories(
@@ -34,7 +62,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  Future<void> _onAddCategory(
+  Future<void> _onInsertOrUpdate(
     AddCategory event,
     Emitter<CategoryState> emit,
   ) async {

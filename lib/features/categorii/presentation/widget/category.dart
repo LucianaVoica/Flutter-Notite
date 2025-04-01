@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../data/category_model.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../data/models/category_model.dart';
 
 class Category extends StatelessWidget {
+  //category_card??
   const Category({super.key, required this.category});
 
   final CategoryModel category;
@@ -17,7 +19,7 @@ class Category extends StatelessWidget {
                 ? Theme.of(context).primaryColor
                 : Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Theme.of(context).primaryColor, width: 1.5),
+        border: Border.all(color: AppColors.primaryLight, width: 1.5),
       ),
       child: Center(
         child: Text(

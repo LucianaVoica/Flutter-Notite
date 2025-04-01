@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/category_model.dart';
+import '../../../../core/widgets/loader.dart';
+import '../../../notite/presentation/pages/lista_notite.dart';
+import '../../data/models/category_model.dart';
 import '../bloc/category_bloc.dart';
-import '../bloc/category_event.dart';
 import '../bloc/category_state.dart';
 import 'category.dart';
 
@@ -14,7 +15,7 @@ class CategoryList extends StatelessWidget {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (BuildContext context, CategoryState state) {
         if (state is CategoryLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Loader();
         }
         if (state is CategoryLoaded) {
           return Padding(
@@ -33,8 +34,12 @@ class CategoryList extends StatelessWidget {
                       final CategoryModel category = state.categories[index];
                       return GestureDetector(
                         onTap: () {
-                          context.read<CategoryBloc>().add(
-                            SelectCategory(category.id),
+                          Navigator.push(
+                            context,
+                            ListaNotite.route(
+                              categoryType: category.id,
+                              categories: state.categories,
+                            ),
                           );
                         },
                         child: Category(category: category),

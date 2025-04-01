@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../data/category_model.dart';
+import 'package:flutter/material.dart';
+import '../../data/models/category_model.dart';
 
 abstract class CategoryEvent extends Equatable {
   @override
@@ -15,8 +16,13 @@ class LoadCategories extends CategoryEvent {
 }
 
 class SelectCategory extends CategoryEvent {
-  SelectCategory(this.categoryId);
+  SelectCategory({required this.categoryId, required this.context});
+
   final String categoryId;
+  final BuildContext context;
+
+  @override
+  List<Object?> get props => <Object?>[categoryId, context];
 }
 
 class AddCategory extends CategoryEvent {
