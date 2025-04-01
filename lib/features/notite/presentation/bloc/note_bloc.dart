@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../services/supabase_service.dart';
+import '../../../../core/services/supabase_service.dart';
 import '../../data/model/note_model.dart';
 import 'note_event.dart';
 import 'note_state.dart';

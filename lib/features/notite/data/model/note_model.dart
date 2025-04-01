@@ -1,23 +1,13 @@
-class NoteModel {
-  NoteModel({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.categoryId,
-  });
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import '../entity/note_entity.dart';
 
-  factory NoteModel.fromJson(Map<String, dynamic> json) {
-    return NoteModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      categoryId: json['category_id'] as String,
-    );
-  }
-  final String id;
-  final String title;
-  final String content;
-  final String categoryId;
+class NoteModel extends NoteEntity {
+  NoteModel({
+    required super.id,
+    required super.title,
+    required super.content,
+    required super.categoryId,
+  });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -26,5 +16,14 @@ class NoteModel {
       'content': content,
       'category_id': categoryId,
     };
+  }
+
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
+    return NoteModel(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String,
+      categoryId: json['category_id'] as String,
+    );
   }
 }

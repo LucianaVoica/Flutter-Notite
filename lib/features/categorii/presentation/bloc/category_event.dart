@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import '../../data/category_model.dart';
+import '../../data/models/category_model.dart';
 
 abstract class CategoryEvent extends Equatable {
   @override

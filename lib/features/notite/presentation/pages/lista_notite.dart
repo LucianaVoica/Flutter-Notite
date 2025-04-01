@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../theme/app_colors.dart';
-import '../../../categorii/data/category_model.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../categorii/data/models/category_model.dart';
 import '../../data/model/note_model.dart';
 import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';

@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../features/categorii/data/category_model.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/gradient.dart';
+import '../core/widgets/avatar.dart';
+import '../features/categorii/data/models/category_model.dart';
 import '../features/categorii/presentation/bloc/category_bloc.dart';
 import '../features/categorii/presentation/bloc/category_event.dart';
 import '../features/categorii/presentation/bloc/category_state.dart';
 import '../features/categorii/presentation/widget/add_category_form.dart';
 import '../features/categorii/presentation/widget/category_list.dart';
 import '../features/home/pinned_notes.dart';
-
 import '../features/notite/presentation/widget/add_note_form.dart';
-import '../theme/app_colors.dart';
-import '../theme/gradient.dart';
-import '../widget/avatar/avatar.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -62,7 +61,7 @@ class _LandingPageState extends State<LandingPage> {
     if (state is CategoryLoaded) {
       Navigator.push(
         context,
-        MaterialPageRoute(
+        MaterialPageRoute<dynamic>(
           builder:
               (BuildContext context) =>
                   Scaffold(body: AddNoteForm(categories: state.categories)),

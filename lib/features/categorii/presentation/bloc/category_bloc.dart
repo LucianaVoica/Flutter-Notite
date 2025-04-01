@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../services/supabase_service.dart';
+import '../../../../core/services/supabase_service.dart';
 import '../../../notite/presentation/bloc/note_bloc.dart';
 import '../../../notite/presentation/bloc/note_event.dart';
-import '../../data/category_model.dart';
+import '../../data/models/category_model.dart';
 import 'category_event.dart';
 import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
+    on<CategoryEvent>((CategoryEvent event, Emitter<CategoryState> emit) {
+      emit(CategoryLoading());
+    });
     on<LoadCategories>(_onLoadCategories);
-    on<AddCategory>(_onAddCategory);
+    on<AddCategory>(_onInsertOrUpdate);
     on<SelectCategory>(_onSelectCategory);
   }
 
@@ -32,7 +35,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     emit(CategoryLoaded(categories: updatedCategories));
     emit(CategorySelected(categoryId: event.categoryId));
 
-    // Declanșează încărcarea notițelor pentru categoria selectată
     final NoteBloc noteBloc = BlocProvider.of<NoteBloc>(event.context);
     noteBloc.add(LoadNotes(categoryId: event.categoryId));
   }
@@ -60,17 +62,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  @override
-  Future<void> onTransition(
-    Transition<CategoryEvent, CategoryState> transition,
-  ) async {
-    super.onTransition(transition);
-    if (transition.nextState is CategoryFailure) {
-      add(LoadCategories(categories: const <CategoryModel>[]));
-    }
-  }
-
-  Future<void> _onAddCategory(
+  Future<void> _onInsertOrUpdate(
     AddCategory event,
     Emitter<CategoryState> emit,
   ) async {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../theme/app_colors.dart';
-import '../../data/category_model.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../data/models/category_model.dart';
 
 class Category extends StatelessWidget {
+  //category_card??
   const Category({super.key, required this.category});
 
   final CategoryModel category;

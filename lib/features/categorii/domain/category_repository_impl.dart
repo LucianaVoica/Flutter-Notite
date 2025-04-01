@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../data/category_model.dart';
+import '../data/models/category_model.dart';
 import 'icategory_repository.dart';
 
 class CategoryRepositoryImpl implements ICategoryRepository {
@@ -20,6 +20,8 @@ class CategoryRepositoryImpl implements ICategoryRepository {
   @override
   Future<void> selectCategory(String categoryId) async {
     try {
+      ///default in supabase toate false initial;
+      // selectul nu l-as tine in baza doar date
       await supabase
           .from('categories')
           .update(<dynamic, dynamic>{'isSelected': false})

@@ -42,6 +42,15 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
     ),
+
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        color: Colors.black,
+      ),
+      border: OutlineInputBorder(),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(

@@ -25,3 +25,6 @@ class NoteFailure extends NoteState {
   @override
   List<Object?> get props => <Object?>[error];
 }
+
+// ignore: flutter_style_todos
+//TODO - state add/ update
