@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../categorii/data/models/category_model.dart';
+import '../../../../core/colors/app_colors.dart';
+import '../../../categories/data/models/category_model.dart';
 import '../../data/model/note_model.dart';
 import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';
@@ -34,8 +34,8 @@ class ListaNotite extends StatelessWidget {
     context.read<NoteBloc>().add(LoadNotes(categoryId: categoryType));
 
     return Scaffold(
-      backgroundColor: AppColors.secondaryLight,
-      appBar: AppBar(backgroundColor: AppColors.secondaryLight),
+      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.secondary),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (BuildContext context, NoteState state) {
           if (state is NoteLoading) {
@@ -44,12 +44,7 @@ class ListaNotite extends StatelessWidget {
 
           if (state is NoteLoaded) {
             if (state.notes.isEmpty) {
-              return const Center(
-                child: Text(
-                  'Nu au fost introduse notițe',
-                  style: TextStyle(fontSize: 18, color: Colors.black54),
-                ),
-              );
+              return const Center(child: Text('Nu au fost introduse notițe'));
             }
 
             return ListView.builder(
@@ -69,7 +64,7 @@ class ListaNotite extends StatelessWidget {
                     key: Key(note.id),
                     direction: DismissDirection.endToStart,
                     background: Container(
-                      color: Colors.red,
+                      color: AppColors.errorLight,
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: const Icon(Icons.delete, color: Colors.white),
@@ -87,10 +82,12 @@ class ListaNotite extends StatelessWidget {
             );
           }
 
-          return const Center(
+          return Center(
             child: Text(
               'Eroare la încărcarea notițelor',
-              style: TextStyle(fontSize: 18, color: Colors.red),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppColors.errorLight),
             ),
           );
         },

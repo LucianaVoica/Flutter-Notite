@@ -6,14 +6,13 @@ import 'package:nested/nested.dart';
 import 'core/app_router/app_router.dart';
 import 'core/services/locator.dart';
 import 'core/services/supabase_service.dart';
-import 'core/theme/gradient.dart';
 import 'core/theme/theme.dart';
-import 'features/categorii/data/models/category_model.dart';
-import 'features/categorii/presentation/bloc/category_bloc.dart';
-import 'features/categorii/presentation/bloc/category_event.dart';
+import 'features/categories/data/models/category_model.dart';
+import 'features/categories/presentation/bloc/category_bloc.dart';
+import 'features/categories/presentation/bloc/category_event.dart';
+import 'features/landing/presentation/landin_page.dart';
 import 'features/notite/presentation/bloc/note_bloc.dart';
 import 'features/notite/presentation/bloc/note_event.dart';
-import 'pages/landin_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create:
-              (context) =>
+              (BuildContext context) =>
                   NoteBloc()..add(
                     LoadNotes(
                       categoryId: '00000000-0000-0000-0000-000000000001',
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: AppRouter.generateRoute,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const GradientBackground(child: LandingPage()),
+        home: const LandingPage(),
       ),
     );
   }

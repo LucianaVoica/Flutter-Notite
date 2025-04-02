@@ -44,14 +44,14 @@ class AddCategoryFormState extends State<AddCategoryForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text('Adaugă categorie', style: TextStyle(fontSize: 20)),
+          Text(
+            'Adaugă categorie',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
           TextField(
             controller: _controller,
-            decoration: InputDecoration(
-              labelText: 'Nume categorie',
-              border: Theme.of(context).inputDecorationTheme.border,
-            ),
+            decoration: const InputDecoration(labelText: 'Nume categorie'),
           ),
           const SizedBox(height: 10),
           ElevatedButton(

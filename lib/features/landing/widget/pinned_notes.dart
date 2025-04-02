@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
 
 class PinnedNotesCard extends StatelessWidget {
   const PinnedNotesCard({super.key, required this.pinnedNotes});
@@ -11,32 +10,16 @@ class PinnedNotesCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 4,
       margin: const EdgeInsets.all(16),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: <Color>[
-              Color.fromARGB(255, 244, 227, 206),
-              AppColors.primaryLight,
-            ],
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
-        height: 200,
+      child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Row(
+            Row(
               children: <Widget>[
-                Text(
-                  'Pinned',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
+                Text('Pinned', style: Theme.of(context).textTheme.bodyMedium),
 
-                Spacer(),
-                Icon(Icons.push_pin),
+                const Spacer(),
+                const Icon(Icons.push_pin),
               ],
             ),
             const SizedBox(height: 12),

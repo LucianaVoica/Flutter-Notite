@@ -21,11 +21,9 @@ class Note extends StatelessWidget {
         child: Center(
           child: Text(
             note.title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
       ),

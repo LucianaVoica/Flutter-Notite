@@ -1,58 +1,52 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'app_colors.dart';
+import '../colors/app_colors.dart';
 
 class AppTheme {
-  static ThemeData lightTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.secondaryLight,
-    primaryColor: AppColors.primaryLight,
-    textTheme: const TextTheme(
-      displayMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      displaySmall: TextStyle(fontSize: 30, fontWeight: FontWeight.normal),
-      titleLarge: TextStyle(
-        fontSize: 45,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-    ),
+  static OutlineInputBorder _border({Color color = Colors.black}) =>
+      OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: color, width: 3),
+      );
+  static TextStyle _styleText() =>
+      const TextStyle(fontSize: 18, fontWeight: FontWeight.normal);
 
+  static ThemeData lightTheme = FlexThemeData.light(
+    scheme: FlexScheme.mango,
+    fontFamily: GoogleFonts.jost().fontFamily,
+  ).copyWith(
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryLight,
-        foregroundColor: Colors.black,
         fixedSize: const Size(130, 50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        textStyle: const TextStyle(fontSize: 16),
-      ),
-    ),
-
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: Colors.black,
-        textStyle: const TextStyle(fontSize: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        textStyle: _styleText(),
       ),
     ),
 
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.black,
         side: const BorderSide(width: 2),
-        textStyle: const TextStyle(fontSize: 20),
+        textStyle: _styleText(),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
     ),
 
-    inputDecorationTheme: const InputDecorationTheme(
-      labelStyle: TextStyle(
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
-        color: Colors.black,
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: _styleText(),
+      border: _border(),
+      enabledBorder: _border(),
+      focusedBorder: _border().copyWith(
+        borderSide: const BorderSide(color: AppColors.accentLight, width: 3),
       ),
-      border: OutlineInputBorder(),
+      errorBorder: _border().copyWith(
+        borderSide: const BorderSide(color: AppColors.errorLight, width: 3),
+      ),
     ),
   );
 
+  //? TODO - de completat ulterior si thema pt dark
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.black,
     textTheme: const TextTheme(
