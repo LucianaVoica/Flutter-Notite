@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../core/theme/app_colors.dart';
-import '../core/theme/gradient.dart';
-import '../core/widgets/avatar.dart';
-import '../features/categorii/data/models/category_model.dart';
-import '../features/categorii/presentation/bloc/category_bloc.dart';
-import '../features/categorii/presentation/bloc/category_event.dart';
-import '../features/categorii/presentation/bloc/category_state.dart';
-import '../features/categorii/presentation/widget/add_category_form.dart';
-import '../features/categorii/presentation/widget/category_list.dart';
-import '../features/home/pinned_notes.dart';
-import '../features/notite/presentation/widget/add_note_form.dart';
+import '../../../core/widgets/avatar.dart';
+import '../../categories/data/models/category_model.dart';
+import '../../categories/presentation/bloc/category_bloc.dart';
+import '../../categories/presentation/bloc/category_event.dart';
+import '../../categories/presentation/bloc/category_state.dart';
+import '../../categories/presentation/pages/category_list.dart';
+import '../../categories/presentation/widget/add_category_form.dart';
+import '../../notite/presentation/widget/add_note_form.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -80,49 +77,38 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         centerTitle: false,
-        backgroundColor: AppColors.secondaryLight,
-        title: const Text(
-          'My Notes ',
-          style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: Text(
+          'My Notes',
+          style: Theme.of(
+            context,
+          ).textTheme.displayLarge!.copyWith(color: Colors.black),
         ),
         actions: <Widget>[
           Text('Hi, Luci ', style: Theme.of(context).textTheme.titleSmall),
           const Avatar(),
         ],
       ),
-      body: GradientBackground(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const CategoryList(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SfCalendar(
-                headerStyle: const CalendarHeaderStyle(
-                  backgroundColor: AppColors.primaryLight,
-                ),
-                view: CalendarView.month,
-              ),
-            ),
-            const PinnedNotesCard(
-              pinnedNotes: <String>[
-                'Note 1',
-                'Important Note',
-                'Remember this',
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: IconButton(
-                icon: const Icon(Icons.folder, size: 50),
-                onPressed: () => _showAddCategoryModal(context),
-                color: AppColors.primaryLight,
-              ),
-            ),
-          ],
-        ),
-      ),
 
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const CategoryList(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SfCalendar(view: CalendarView.month),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+              icon: const Icon(Icons.folder, size: 50),
+              onPressed: () => _showAddCategoryModal(context),
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToAddNote(),
         backgroundColor: Colors.black,

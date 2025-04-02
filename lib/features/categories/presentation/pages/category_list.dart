@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/loader.dart';
-import '../../../notite/presentation/pages/lista_notite.dart';
+import '../../../notite/presentation/pages/notes_list.dart';
 import '../../data/models/category_model.dart';
 import '../bloc/category_bloc.dart';
 import '../bloc/category_state.dart';
-import 'category.dart';
+import '../widget/category.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});
@@ -42,7 +42,7 @@ class CategoryList extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Category(category: category),
+                        child: CategoryCard(category: category),
                       );
                     },
                   ),

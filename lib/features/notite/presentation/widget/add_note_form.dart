@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../categorii/data/models/category_model.dart';
+import '../../../../core/colors/app_colors.dart';
+import '../../../categories/data/models/category_model.dart';
 import '../../data/model/note_model.dart';
 import '../bloc/note_bloc.dart';
 import '../bloc/note_event.dart';
@@ -92,12 +92,9 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Alege o categorie',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.displaySmall,
                     ),
                     const SizedBox(height: 20),
                     DropdownButton<String>(
@@ -162,6 +159,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         leading: IconButton(
           icon: const CircleAvatar(
             backgroundColor: Colors.black,
@@ -171,7 +169,6 @@ class _AddNoteFormState extends State<AddNoteForm> {
           onPressed: () => Navigator.pop(context),
         ),
 
-        backgroundColor: AppColors.secondaryLight,
         actions: <Widget>[
           IconButton(
             icon: const CircleAvatar(
@@ -217,10 +214,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                             ),
                       )
                       .name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ],
             ),
@@ -230,7 +224,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
               height: 60,
               width: 180,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 243, 211, 169),
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
@@ -276,13 +270,11 @@ class _AddNoteFormState extends State<AddNoteForm> {
               child: TextFormField(
                 controller: _titleController,
                 textAlignVertical: TextAlignVertical.top,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.displayMedium,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  fillColor: Color.fromARGB(255, 236, 197, 147),
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                 ),
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_contentFocusNode);
@@ -298,7 +290,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   keyboardType: TextInputType.multiline,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.zero,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                   ),
                 ),
               ),
