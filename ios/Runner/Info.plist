@@ -54,5 +54,17 @@
 <key>NSPhotoLibraryAddUsageDescription</key>
 <string>App-ul are nevoie de acces pentru a salva imagini.</string>
 
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Aplicația necesită acces la locație.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>Aplicația necesită acces continuu la locație.</string>
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+<key>GMSApiKey</key>
+<string>API_KEY_MAPS</string>
+
 </dict>
 </plist>

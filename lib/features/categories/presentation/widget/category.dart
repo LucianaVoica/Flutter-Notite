@@ -8,17 +8,10 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //! Chp - nu container
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-
-      child: Center(
-        child: Text(
-          category.name,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ),
+    return Chip(
+      label: Text(category.name),
+      side: BorderSide(color: Theme.of(context).primaryColor, width: 2.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
     );
   }
 }

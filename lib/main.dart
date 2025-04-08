@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nested/nested.dart';
 
-import 'core/app_router/app_router.dart';
 import 'core/services/locator.dart';
 import 'core/services/supabase_service.dart';
 import 'core/theme/theme.dart';
 import 'features/categories/data/models/category_model.dart';
 import 'features/categories/presentation/bloc/category_bloc.dart';
 import 'features/categories/presentation/bloc/category_event.dart';
-import 'features/landing/presentation/landin_page.dart';
+import 'features/landing/presentation/home_page.dart';
 import 'features/notite/presentation/bloc/note_bloc.dart';
 import 'features/notite/presentation/bloc/note_event.dart';
 
@@ -44,17 +43,14 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
         ),
-
         BlocProvider<NoteBloc>(create: (BuildContext context) => NoteBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Notite',
-        initialRoute: LandingPage.route,
-        onGenerateRoute: AppRouter.generateRoute,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const LandingPage(),
+        home: const HomePage(),
       ),
     );
   }

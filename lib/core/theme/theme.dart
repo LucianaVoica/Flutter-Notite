@@ -14,7 +14,7 @@ class AppTheme {
       const TextStyle(fontSize: 18, fontWeight: FontWeight.normal);
 
   static ThemeData lightTheme = FlexThemeData.light(
-    scheme: FlexScheme.mango,
+    scheme: FlexScheme.sakura,
     fontFamily: GoogleFonts.jost().fontFamily,
   ).copyWith(
     elevatedButtonTheme: ElevatedButtonThemeData(

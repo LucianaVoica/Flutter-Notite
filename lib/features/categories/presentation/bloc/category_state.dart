@@ -35,3 +35,19 @@ class CategorySelected extends CategoryState {
   @override
   List<Object?> get props => <Object?>[categoryId];
 }
+
+class CategoryAddSuccess extends CategoryState {
+  CategoryAddSuccess({required this.category});
+  final CategoryModel category;
+
+  @override
+  List<Object?> get props => <Object?>[category];
+}
+
+class CategoryDeleteSuccess extends CategoryState {
+  CategoryDeleteSuccess({required this.deletedCategoryId});
+  final String deletedCategoryId;
+
+  @override
+  List<Object?> get props => <Object?>[deletedCategoryId];
+}

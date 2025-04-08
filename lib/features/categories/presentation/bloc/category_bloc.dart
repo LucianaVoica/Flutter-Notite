@@ -14,8 +14,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emit(CategoryLoading());
     });
     on<LoadCategories>(_onLoadCategories);
-    on<AddCategory>(_onInsertOrUpdate);
+    on<AddCategory>(_onInsertCategory);
     on<SelectCategory>(_onSelectCategory);
+    on<DeleteCategory>(_onDeleteCategory);
   }
 
   void _onSelectCategory(SelectCategory event, Emitter<CategoryState> emit) {
@@ -33,6 +34,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     debugPrint('Categorie selectată: ${event.categoryId}');
 
     emit(CategoryLoaded(categories: updatedCategories));
+
     emit(CategorySelected(categoryId: event.categoryId));
 
     final NoteBloc noteBloc = BlocProvider.of<NoteBloc>(event.context);
@@ -62,7 +64,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     }
   }
 
-  Future<void> _onInsertOrUpdate(
+  Future<void> _onInsertCategory(
     AddCategory event,
     Emitter<CategoryState> emit,
   ) async {
@@ -74,6 +76,56 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       final List<CategoryModel> updatedCategories = List<CategoryModel>.from(
         (state as CategoryLoaded).categories,
       )..add(event.category);
+
+      emit(CategoryLoaded(categories: updatedCategories));
+    } catch (error) {
+      emit(CategoryFailure(error: error.toString()));
+    }
+  }
+
+  Future<void> _onDeleteCategory(
+    DeleteCategory event,
+    Emitter<CategoryState> emit,
+  ) async {
+    try {
+      final List<CategoryModel> currentCategories =
+          (state as CategoryLoaded).categories;
+
+      final int index = currentCategories.indexWhere(
+        (CategoryModel c) => c.id == event.category.id,
+      );
+
+      if (index < 3) {
+        emit(
+          CategoryFailure(
+            error:
+                'Nu poți șterge această categorie, este o categorie de bază.',
+          ),
+        );
+        return;
+      }
+
+      await SupabaseService.supabaseClient
+          .from('notes')
+          .delete()
+          .eq('category_id', event.category.id);
+
+      await SupabaseService.supabaseClient
+          .from('categories')
+          .delete()
+          .eq('id', event.category.id);
+
+      final List<Map<String, dynamic>> categoriesData =
+          await SupabaseService.supabaseClient.from('categories').select();
+
+      final List<CategoryModel> updatedCategories =
+          categoriesData.map((Map<String, dynamic> category) {
+            return CategoryModel(
+              id: category['id'].toString(),
+              name: category['name'].toString(),
+              isSelected: false,
+            );
+          }).toList();
 
       emit(CategoryLoaded(categories: updatedCategories));
     } catch (error) {

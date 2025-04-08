@@ -26,5 +26,26 @@ class NoteFailure extends NoteState {
   List<Object?> get props => <Object?>[error];
 }
 
-// ignore: flutter_style_todos
-//TODO - state add/ update
+class NoteAddSuccess extends NoteState {
+  NoteAddSuccess({required this.note});
+  final NoteModel note;
+
+  @override
+  List<Object?> get props => <Object?>[note];
+}
+
+class NoteUpdateSuccess extends NoteState {
+  NoteUpdateSuccess({required this.note});
+  final NoteModel note;
+
+  @override
+  List<Object?> get props => <Object?>[note];
+}
+
+class NoteDeleteSuccess extends NoteState {
+  NoteDeleteSuccess({required this.deletedNoteId});
+  final int deletedNoteId;
+
+  @override
+  List<Object?> get props => <Object?>[deletedNoteId];
+}

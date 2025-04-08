@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/colors/app_colors.dart';
 import '../../../categories/data/models/category_model.dart';
 import '../../data/model/note_model.dart';
 import '../bloc/note_bloc.dart';
