@@ -8,6 +8,7 @@ import '../../categories/presentation/bloc/category_event.dart';
 import '../../categories/presentation/bloc/category_state.dart';
 import '../../categories/presentation/pages/category_list.dart';
 
+import '../../categories/presentation/widget/add_category_form.dart';
 import '../../notite/presentation/widget/add_note_form.dart';
 import '../widget/photo_card.dart';
 import '../widget/search_card.dart';
@@ -29,30 +30,30 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  // void _showAddCategoryModal(BuildContext context) {
-  //   showModalBottomSheet(
-  //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-  //     context: context,
-  //     isScrollControlled: true,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //     ),
-  //     builder: (BuildContext context) {
-  //       return SizedBox(
-  //         height: 250,
-  //         child: Padding(
-  //           padding: EdgeInsets.only(
-  //             bottom: MediaQuery.of(context).viewInsets.bottom,
-  //             left: 16,
-  //             right: 16,
-  //             top: 16,
-  //           ),
-  //           child: const AddCategoryForm(),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void _showAddCategoryModal(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 250,
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 16,
+              right: 16,
+              top: 16,
+            ),
+            child: const AddCategoryForm(),
+          ),
+        );
+      },
+    );
+  }
 
   void _navigateToAddNote() {
     final CategoryState state = context.read<CategoryBloc>().state;
@@ -82,23 +83,33 @@ class _LandingPageState extends State<LandingPage> {
         title: const SearchCard(),
         actions: const <Widget>[Avatar()],
       ),
-      body: const Stack(
+      body: Stack(
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              PhotoCard(),
-              SizedBox(height: 10),
-              CategoryList(),
+              const PhotoCard(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.folder, size: 28),
+                          onPressed: () => _showAddCategoryModal(context),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
+                    ),
+                    const CategoryList(),
+                  ],
+                ),
+              ),
             ],
           ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Padding(
-          //     padding: EdgeInsets.only(bottom: 16),
-          //     child: NavigationCard(),
-          //   ),
-          // ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

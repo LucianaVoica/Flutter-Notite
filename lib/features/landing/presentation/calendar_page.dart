@@ -15,7 +15,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Calendar')),
       body: Stack(
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SfCalendar(view: CalendarView.month),

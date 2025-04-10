@@ -4,6 +4,7 @@ import '../../../../core/widgets/loader.dart';
 import '../../../notite/presentation/pages/notes_list.dart';
 import '../../data/models/category_model.dart';
 import '../bloc/category_bloc.dart';
+import '../bloc/category_event.dart';
 import '../bloc/category_state.dart';
 import '../widget/category.dart';
 
@@ -17,6 +18,7 @@ class CategoryList extends StatelessWidget {
         if (state is CategoryLoading) {
           return const Loader();
         }
+
         if (state is CategoryLoaded) {
           return Padding(
             padding: const EdgeInsets.all(10),
@@ -32,7 +34,9 @@ class CategoryList extends StatelessWidget {
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (BuildContext context, int index) {
                       final CategoryModel category = state.categories[index];
-                      return GestureDetector(
+
+                      return CategoryCard(
+                        category: category,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -42,7 +46,21 @@ class CategoryList extends StatelessWidget {
                             ),
                           );
                         },
-                        child: CategoryCard(category: category),
+                        onDelete:
+                            index < 3
+                                ? null
+                                : () {
+                                  context.read<CategoryBloc>().add(
+                                    DeleteCategory(category: category),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Categoria "${category.name}" a fost ștearsă.',
+                                      ),
+                                    ),
+                                  );
+                                },
                       );
                     },
                   ),
@@ -51,6 +69,7 @@ class CategoryList extends StatelessWidget {
             ),
           );
         }
+
         return const SizedBox();
       },
     );

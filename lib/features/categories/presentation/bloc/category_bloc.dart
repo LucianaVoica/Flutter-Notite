@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: implementation_imports
+import 'package:postgrest/src/types.dart';
 import '../../../../core/services/supabase_service.dart';
 import '../../../notite/presentation/bloc/note_bloc.dart';
 import '../../../notite/presentation/bloc/note_event.dart';
@@ -10,9 +11,6 @@ import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc() : super(CategoryLoading()) {
-    on<CategoryEvent>((CategoryEvent event, Emitter<CategoryState> emit) {
-      emit(CategoryLoading());
-    });
     on<LoadCategories>(_onLoadCategories);
     on<AddCategory>(_onInsertCategory);
     on<SelectCategory>(_onSelectCategory);
@@ -31,10 +29,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
               : category.copyWith(isSelected: false);
         }).toList();
 
-    debugPrint('Categorie selectată: ${event.categoryId}');
-
     emit(CategoryLoaded(categories: updatedCategories));
-
     emit(CategorySelected(categoryId: event.categoryId));
 
     final NoteBloc noteBloc = BlocProvider.of<NoteBloc>(event.context);
@@ -46,11 +41,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     Emitter<CategoryState> emit,
   ) async {
     try {
-      final List<Map<String, dynamic>> categoriesData =
+      final PostgrestList data =
           await SupabaseService.supabaseClient.from('categories').select();
 
       final List<CategoryModel> categories =
-          categoriesData.map((Map<String, dynamic> category) {
+          data.map<CategoryModel>((PostgrestMap category) {
             return CategoryModel(
               id: category['id'].toString(),
               name: category['name'].toString(),
@@ -69,13 +64,25 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     Emitter<CategoryState> emit,
   ) async {
     try {
-      await SupabaseService.supabaseClient.from('categories').insert(
-        <String, Object>{'name': event.category.name, 'is_default': false},
+      final Map<String, dynamic> response =
+          await SupabaseService.supabaseClient
+              .from('categories')
+              .insert(<String, Object>{
+                'name': event.category.name,
+                'is_default': false,
+              })
+              .select()
+              .single();
+
+      final CategoryModel newCategory = CategoryModel(
+        id: response['id'].toString(),
+        name: response['name'].toString(),
+        isSelected: false,
       );
 
       final List<CategoryModel> updatedCategories = List<CategoryModel>.from(
         (state as CategoryLoaded).categories,
-      )..add(event.category);
+      )..add(newCategory);
 
       emit(CategoryLoaded(categories: updatedCategories));
     } catch (error) {
@@ -98,38 +105,60 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       if (index < 3) {
         emit(
           CategoryFailure(
-            error:
-                'Nu poți șterge această categorie, este o categorie de bază.',
+            error: 'Nu poți șterge această categorie, este una de bază.',
           ),
         );
         return;
       }
 
-      await SupabaseService.supabaseClient
-          .from('notes')
-          .delete()
-          .eq('category_id', event.category.id);
+      final PostgrestList noteResponse =
+          await SupabaseService.supabaseClient
+              .from('notes')
+              .delete()
+              .eq('category_id', event.category.id)
+              .select();
 
-      await SupabaseService.supabaseClient
-          .from('categories')
-          .delete()
-          .eq('id', event.category.id);
+      if (noteResponse.error != null) {
+        emit(
+          CategoryFailure(
+            error:
+                // ignore: avoid_dynamic_calls
+                'Eroare la ștergerea notițelor: ${noteResponse.error!.message}',
+          ),
+        );
+        return;
+      }
 
-      final List<Map<String, dynamic>> categoriesData =
-          await SupabaseService.supabaseClient.from('categories').select();
+      final PostgrestList categoryResponse =
+          await SupabaseService.supabaseClient
+              .from('categories')
+              .delete()
+              .eq('id', event.category.id)
+              .select();
+
+      if (categoryResponse.error != null) {
+        emit(
+          CategoryFailure(
+            error:
+                // ignore: avoid_dynamic_calls
+                'Eroare la ștergerea categoriei: ${categoryResponse.error!.message}',
+          ),
+        );
+        return;
+      }
 
       final List<CategoryModel> updatedCategories =
-          categoriesData.map((Map<String, dynamic> category) {
-            return CategoryModel(
-              id: category['id'].toString(),
-              name: category['name'].toString(),
-              isSelected: false,
-            );
-          }).toList();
+          currentCategories
+              .where((CategoryModel c) => c.id != event.category.id)
+              .toList();
 
       emit(CategoryLoaded(categories: updatedCategories));
-    } catch (error) {
-      emit(CategoryFailure(error: error.toString()));
+    } catch (e) {
+      emit(CategoryFailure(error: e.toString()));
     }
   }
+}
+
+extension on PostgrestList {
+  get error => null;
 }
