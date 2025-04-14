@@ -7,6 +7,7 @@ class NoteModel extends NoteEntity {
     required super.title,
     required super.content,
     required super.categoryId,
+    required super.isPinned,
   });
 
   Map<String, dynamic> toJson() {
@@ -15,6 +16,7 @@ class NoteModel extends NoteEntity {
       'title': title,
       'content': content,
       'category_id': categoryId,
+      'isPinned': isPinned,
     };
   }
 
@@ -24,6 +26,7 @@ class NoteModel extends NoteEntity {
       title: json['title'] as String,
       content: json['content'] as String,
       categoryId: json['category_id'] as String,
+      isPinned: json['isPinned'] as bool,
     );
   }
 }
