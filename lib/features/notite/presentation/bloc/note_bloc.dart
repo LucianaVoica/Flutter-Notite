@@ -11,6 +11,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<AddNote>(_onAddNote);
     on<UpdateNote>(_onUpdateNote);
     on<DeleteNote>(_onDeleteNote);
+    on<PinNote>(_onPinNote as EventHandler<PinNote, NoteState>);
   }
 
   Future<void> _onLoadNotes(LoadNotes event, Emitter<NoteState> emit) async {
@@ -28,6 +29,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
               title: note['title'].toString(),
               content: note['content'].toString(),
               categoryId: note['category_id'].toString(),
+              isPinned: note['isPinned'] as bool,
             );
           }).toList();
 
@@ -98,6 +100,31 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
         emit(NoteLoaded(notes: updatedNotes));
       }
+    } catch (error) {
+      emit(NoteFailure(error: error.toString()));
+    }
+  }
+
+  Future<void> _onPinNote(LoadNotes event, Emitter<NoteState> emit) async {
+    try {
+      final List<Map<String, dynamic>> notesData = await SupabaseService
+          .supabaseClient
+          .from('notes')
+          .select()
+          .eq('category_id', event.categoryId);
+
+      final List<NoteModel> notes =
+          notesData.map((Map<String, dynamic> note) {
+            return NoteModel(
+              id: note['id'].toString(),
+              title: note['title'].toString(),
+              content: note['content'].toString(),
+              categoryId: note['category_id'].toString(),
+              isPinned: note['isPinned'] as bool,
+            );
+          }).toList();
+
+      emit(NoteLoaded(notes: notes));
     } catch (error) {
       emit(NoteFailure(error: error.toString()));
     }

@@ -30,6 +30,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
   final FocusNode _contentFocusNode = FocusNode();
 
   late String selectedCategoryId;
+  late bool isPinned = false;
 
   Color _getCategoryColor(String? categoryId) {
     if (categoryId == '00000000-0000-0000-0000-000000000001') {
@@ -73,6 +74,28 @@ class _AddNoteFormState extends State<AddNoteForm> {
     );
     selectedCategoryId =
         widget.note?.categoryId ?? '00000000-0000-0000-0000-000000000001';
+
+    isPinned = widget.note?.isPinned ?? false;
+  }
+
+  void togglePinNote() {
+    setState(() {
+      isPinned = !isPinned;
+    });
+
+    final NoteModel updatedNote = NoteModel(
+      id: widget.note?.id ?? UniqueKey().toString(),
+      title: _titleController.text,
+      content: _contentController.text,
+      categoryId: selectedCategoryId,
+      isPinned: isPinned,
+    );
+
+    if (widget.note == null) {
+      context.read<NoteBloc>().add(AddNote(note: updatedNote));
+    } else {
+      context.read<NoteBloc>().add(UpdateNote(note: updatedNote));
+    }
   }
 
   void _showCategoryDialog() {
@@ -110,7 +133,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                         setState(() {
                           selectedCategoryId = value!;
                         });
-                        setDialogState(() {}); //
+                        setDialogState(() {});
                       },
                       style: const TextStyle(color: Colors.black),
                       dropdownColor: Colors.white,
@@ -140,13 +163,12 @@ class _AddNoteFormState extends State<AddNoteForm> {
       title: _titleController.text,
       content: _contentController.text,
       categoryId: selectedCategoryId,
+      isPinned: false,
     );
 
     if (widget.note == null) {
-      // Adăugare notiță nouă
       context.read<NoteBloc>().add(AddNote(note: note));
     } else {
-      // Editare notiță existentă
       context.read<NoteBloc>().add(UpdateNote(note: note));
     }
 
@@ -169,6 +191,21 @@ class _AddNoteFormState extends State<AddNoteForm> {
         ),
 
         actions: <Widget>[
+          IconButton(
+            icon: CircleAvatar(
+              backgroundColor: Colors.black,
+              radius: 20,
+              child: Icon(
+                isPinned
+                    ? Icons.bookmark
+                    : Icons
+                        .bookmark_border_outlined, // Schimbăm iconița în funcție de stare
+                color: Colors.white,
+              ),
+            ),
+            onPressed: togglePinNote,
+          ),
+          const SizedBox(width: 3),
           IconButton(
             icon: const CircleAvatar(
               backgroundColor: Colors.black,
