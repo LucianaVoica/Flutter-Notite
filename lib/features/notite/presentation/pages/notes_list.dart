@@ -70,7 +70,12 @@ class ListaNotite extends StatelessWidget {
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     onDismissed: (DismissDirection direction) {
-                      context.read<NoteBloc>().add(DeleteNote(noteId: note.id));
+                      context.read<NoteBloc>().add(
+                        DeleteNote(
+                          noteId: note.id,
+                          categoryId: note.categoryId,
+                        ),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Notița a fost ștearsă')),
                       );
@@ -82,18 +87,13 @@ class ListaNotite extends StatelessWidget {
             );
           }
 
-          return Column(
-            children: <Widget>[
-              Center(
-                child: Text(
-                  'Eroare la încărcarea notițelor',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: AppColors.errorLight),
-                ),
-              ),
-              Text('state nota: $state'),
-            ],
+          return Center(
+            child: Text(
+              'Eroare la încărcarea notițelor',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppColors.errorLight),
+            ),
           );
         },
       ),

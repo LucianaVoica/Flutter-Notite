@@ -32,9 +32,10 @@ class UpdateNote extends NoteEvent {
 }
 
 class DeleteNote extends NoteEvent {
-  DeleteNote({required this.noteId});
+  DeleteNote({required this.noteId, required this.categoryId});
 
   final String noteId;
+  final String categoryId;
 }
 
 class PinNote extends NoteEvent {
