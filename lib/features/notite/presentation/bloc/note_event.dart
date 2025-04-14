@@ -38,11 +38,16 @@ class DeleteNote extends NoteEvent {
 }
 
 class PinNote extends NoteEvent {
-  PinNote({required this.noteId, required this.isPinned});
+  PinNote({
+    required this.categoryId,
+    required this.noteId,
+    required this.isPinned,
+  });
 
   final String noteId;
+  final String categoryId;
   final bool isPinned;
 
   @override
-  List<Object?> get props => <Object?>[noteId, isPinned];
+  List<Object?> get props => <Object?>[categoryId, noteId, isPinned];
 }

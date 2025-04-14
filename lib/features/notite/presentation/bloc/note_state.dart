@@ -49,3 +49,12 @@ class NoteDeleteSuccess extends NoteState {
   @override
   List<Object?> get props => <Object?>[deletedNoteId];
 }
+
+class NotePinnedSuccess extends NoteState {
+  NotePinnedSuccess({required this.noteId, required this.isPinned});
+  final int noteId;
+  final bool isPinned;
+
+  @override
+  List<Object?> get props => <Object?>[noteId, isPinned];
+}

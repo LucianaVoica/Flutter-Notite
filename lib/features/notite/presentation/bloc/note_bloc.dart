@@ -11,7 +11,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     on<AddNote>(_onAddNote);
     on<UpdateNote>(_onUpdateNote);
     on<DeleteNote>(_onDeleteNote);
-    on<PinNote>(_onPinNote as EventHandler<PinNote, NoteState>);
+    on<PinNote>(_onPinNote);
   }
 
   Future<void> _onLoadNotes(LoadNotes event, Emitter<NoteState> emit) async {
@@ -45,6 +45,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
         'title': event.note.title,
         'content': event.note.content,
         'category_id': event.note.categoryId,
+        'isPinned': event.note.isPinned,
       };
 
       await SupabaseService.supabaseClient.from('notes').insert(newNote);
@@ -105,8 +106,16 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     }
   }
 
-  Future<void> _onPinNote(LoadNotes event, Emitter<NoteState> emit) async {
+  Future<void> _onPinNote(PinNote event, Emitter<NoteState> emit) async {
     try {
+      // 1. Update note in Supabase
+      await SupabaseService.supabaseClient
+          .from('notes')
+          .update({'isPinned': event.isPinned})
+          .eq('id', event.noteId)
+          .select();
+
+      // 2. Re-fetch updated notes
       final List<Map<String, dynamic>> notesData = await SupabaseService
           .supabaseClient
           .from('notes')

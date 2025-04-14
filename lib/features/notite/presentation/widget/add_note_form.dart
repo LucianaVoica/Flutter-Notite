@@ -83,18 +83,14 @@ class _AddNoteFormState extends State<AddNoteForm> {
       isPinned = !isPinned;
     });
 
-    final NoteModel updatedNote = NoteModel(
-      id: widget.note?.id ?? UniqueKey().toString(),
-      title: _titleController.text,
-      content: _contentController.text,
-      categoryId: selectedCategoryId,
-      isPinned: isPinned,
-    );
-
-    if (widget.note == null) {
-      context.read<NoteBloc>().add(AddNote(note: updatedNote));
-    } else {
-      context.read<NoteBloc>().add(UpdateNote(note: updatedNote));
+    if (widget.note != null) {
+      context.read<NoteBloc>().add(
+        PinNote(
+          noteId: widget.note!.id,
+          isPinned: isPinned,
+          categoryId: selectedCategoryId,
+        ),
+      );
     }
   }
 
@@ -163,7 +159,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
       title: _titleController.text,
       content: _contentController.text,
       categoryId: selectedCategoryId,
-      isPinned: false,
+      isPinned: isPinned,
     );
 
     if (widget.note == null) {

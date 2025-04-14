@@ -82,13 +82,18 @@ class ListaNotite extends StatelessWidget {
             );
           }
 
-          return Center(
-            child: Text(
-              'Eroare la încărcarea notițelor',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: AppColors.errorLight),
-            ),
+          return Column(
+            children: <Widget>[
+              Center(
+                child: Text(
+                  'Eroare la încărcarea notițelor',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: AppColors.errorLight),
+                ),
+              ),
+              Text('state nota: $state'),
+            ],
           );
         },
       ),
