@@ -30,6 +30,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
   final FocusNode _contentFocusNode = FocusNode();
 
   late String selectedCategoryId;
+  late String selectedCategoryName;
   late bool isPinned = false;
 
   Color _getCategoryColor(String? categoryId) {
@@ -74,6 +75,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
     );
     selectedCategoryId =
         widget.note?.categoryId ?? '00000000-0000-0000-0000-000000000001';
+
+    selectedCategoryName = widget.note?.categoryName ?? 'All';
 
     isPinned = widget.note?.isPinned ?? false;
   }
@@ -126,11 +129,25 @@ class _AddNoteFormState extends State<AddNoteForm> {
                             );
                           }).toList(),
                       onChanged: (String? value) {
+                        final CategoryModel selectedCategory = widget.categories
+                            .firstWhere(
+                              (CategoryModel category) => category.id == value,
+                              orElse:
+                                  () => CategoryModel(
+                                    id: '',
+                                    name: 'All',
+                                    isSelected: false,
+                                  ),
+                            );
+
                         setState(() {
-                          selectedCategoryId = value!;
+                          selectedCategoryId = selectedCategory.id;
+                          selectedCategoryName = selectedCategory.name;
                         });
+
                         setDialogState(() {});
                       },
+
                       style: const TextStyle(color: Colors.black),
                       dropdownColor: Colors.white,
                       iconSize: 30,
@@ -159,6 +176,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
       title: _titleController.text,
       content: _contentController.text,
       categoryId: selectedCategoryId,
+      categoryName: selectedCategoryName,
       isPinned: isPinned,
     );
 
@@ -187,20 +205,6 @@ class _AddNoteFormState extends State<AddNoteForm> {
         ),
 
         actions: <Widget>[
-          IconButton(
-            icon: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 20,
-              child: Icon(
-                isPinned
-                    ? Icons.bookmark
-                    : Icons
-                        .bookmark_border_outlined, // Schimbăm iconița în funcție de stare
-                color: Colors.white,
-              ),
-            ),
-            onPressed: togglePinNote,
-          ),
           const SizedBox(width: 3),
           IconButton(
             icon: const CircleAvatar(
@@ -262,15 +266,18 @@ class _AddNoteFormState extends State<AddNoteForm> {
               child: Row(
                 children: <Widget>[
                   IconButton(
-                    icon: const CircleAvatar(
+                    icon: CircleAvatar(
                       backgroundColor: Colors.black,
                       radius: 20,
                       child: Icon(
-                        Icons.bookmark_border_outlined,
+                        isPinned
+                            ? Icons.bookmark
+                            : Icons
+                                .bookmark_border_outlined, // Schimbăm iconița în funcție de stare
                         color: Colors.white,
                       ),
                     ),
-                    onPressed: () => (),
+                    onPressed: togglePinNote,
                   ),
                   const SizedBox(width: 5),
                   IconButton(

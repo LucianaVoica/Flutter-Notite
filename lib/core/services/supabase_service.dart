@@ -81,6 +81,7 @@ class SupabaseService {
         title: note['title'].toString(),
         content: note['content'].toString(),
         categoryId: note['category_id'].toString(),
+        categoryName: note['category_name'].toString(),
         isPinned: note['isPinned'] as bool,
       );
     }).toList();
@@ -91,6 +92,7 @@ class SupabaseService {
       'title': note.title,
       'content': note.content,
       'category_id': note.categoryId,
+      'category_name': note.categoryName,
       'isPinned': note.isPinned,
     });
   }
@@ -102,6 +104,7 @@ class SupabaseService {
           'title': note.title,
           'content': note.content,
           'category_id': note.categoryId,
+          'category_name': note.categoryName,
           'isPinned': note.isPinned,
         })
         .eq('id', note.id);
@@ -116,5 +119,23 @@ class SupabaseService {
         .from('notes')
         .update(<dynamic, dynamic>{'isPinned': isPinned})
         .eq('id', noteId);
+  }
+
+  static Future<List<NoteModel>> loadPinnedNotes() async {
+    final List<Map<String, dynamic>> notesData = await supabaseClient
+        .from('notes')
+        .select()
+        .eq('isPinned', true);
+
+    return notesData.map((Map<String, dynamic> note) {
+      return NoteModel(
+        id: note['id'].toString(),
+        title: note['title'].toString(),
+        content: note['content'].toString(),
+        categoryId: note['category_id'].toString(),
+        categoryName: note['category_name'].toString(),
+        isPinned: note['isPinned'] as bool,
+      );
+    }).toList();
   }
 }

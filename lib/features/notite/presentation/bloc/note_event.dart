@@ -52,3 +52,5 @@ class PinNote extends NoteEvent {
   @override
   List<Object?> get props => <Object?>[categoryId, noteId, isPinned];
 }
+
+class LoadPinnedNotes extends NoteEvent {}

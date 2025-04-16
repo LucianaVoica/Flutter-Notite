@@ -58,8 +58,11 @@ class ListaNotite extends StatelessWidget {
                     Navigator.push(
                       context,
                       AddNoteForm.route(categories: categories, note: note),
-                    );
+                    ).then((_) {
+                      context.read<NoteBloc>().add(LoadPinnedNotes());
+                    });
                   },
+
                   child: Dismissible(
                     key: Key(note.id),
                     direction: DismissDirection.endToStart,

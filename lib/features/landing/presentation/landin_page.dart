@@ -9,6 +9,9 @@ import '../../categories/presentation/bloc/category_state.dart';
 import '../../categories/presentation/pages/category_list.dart';
 
 import '../../categories/presentation/widget/add_category_form.dart';
+import '../../notite/presentation/bloc/note_bloc.dart';
+import '../../notite/presentation/bloc/note_event.dart';
+import '../../notite/presentation/pages/notepin_list.dart';
 import '../../notite/presentation/widget/add_note_form.dart';
 import '../widget/photo_card.dart';
 import '../widget/search_card.dart';
@@ -28,6 +31,7 @@ class _LandingPageState extends State<LandingPage> {
     context.read<CategoryBloc>().add(
       LoadCategories(categories: const <CategoryModel>[]),
     );
+    context.read<NoteBloc>().add(LoadPinnedNotes());
   }
 
   void _showAddCategoryModal(BuildContext context) {
@@ -81,36 +85,36 @@ class _LandingPageState extends State<LandingPage> {
         centerTitle: false,
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: const SearchCard(),
-        actions: const <Widget>[Avatar()],
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.folder, size: 28, color: Colors.black),
+            onPressed: () => _showAddCategoryModal(context),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 2),
+          const Avatar(),
+        ],
       ),
-      body: Stack(
-        children: <Widget>[
-          Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const PhotoCard(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        IconButton(
-                          icon: const Icon(Icons.folder, size: 28),
-                          onPressed: () => _showAddCategoryModal(context),
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                    const CategoryList(),
-                  ],
-                ),
+              const CategoryList(),
+              BlocBuilder<CategoryBloc, CategoryState>(
+                builder: (BuildContext context, CategoryState state) {
+                  if (state is CategoryLoaded) {
+                    return NotesPinList(categories: state.categories);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
             ],
           ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToAddNote(),

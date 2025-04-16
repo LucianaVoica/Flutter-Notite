@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/widgets/loader.dart';
+import '../../../notite/presentation/bloc/note_bloc.dart';
+import '../../../notite/presentation/bloc/note_event.dart';
 import '../../../notite/presentation/pages/notes_list.dart';
 import '../../data/models/category_model.dart';
 import '../bloc/category_bloc.dart';
@@ -44,7 +46,9 @@ class CategoryList extends StatelessWidget {
                               categoryType: category.id,
                               categories: state.categories,
                             ),
-                          );
+                          ).then((_) {
+                            context.read<NoteBloc>().add(LoadPinnedNotes());
+                          });
                         },
                         onDelete:
                             index < 3
