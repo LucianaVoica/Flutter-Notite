@@ -9,7 +9,7 @@ import 'core/theme/theme.dart';
 import 'features/categories/data/models/category_model.dart';
 import 'features/categories/presentation/bloc/category_bloc.dart';
 import 'features/categories/presentation/bloc/category_event.dart';
-import 'features/landing/presentation/home_page.dart';
+import 'features/landing/presentation/landing_page.dart';
 import 'features/notite/presentation/bloc/note_bloc.dart';
 import 'features/notite/presentation/bloc/note_event.dart';
 
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         title: 'Notite',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const HomePage(),
+        home: const LandingPage(),
       ),
     );
   }
