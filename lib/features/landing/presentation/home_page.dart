@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../core/widgets/avatar.dart';
 import '../../categories/data/models/category_model.dart';
@@ -7,11 +8,9 @@ import '../../categories/presentation/bloc/category_bloc.dart';
 import '../../categories/presentation/bloc/category_event.dart';
 import '../../categories/presentation/bloc/category_state.dart';
 import '../../categories/presentation/pages/category_list.dart';
-
 import '../../categories/presentation/widget/add_category_form.dart';
 import '../../notite/presentation/bloc/note_bloc.dart';
 import '../../notite/presentation/bloc/note_event.dart';
-import '../../notite/presentation/pages/notepin_list.dart';
 import '../../notite/presentation/widget/add_note_form.dart';
 import '../widget/photo_card.dart';
 import '../widget/search_card.dart';
@@ -79,6 +78,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double halfScreenHeight = MediaQuery.of(context).size.height * 0.25;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 247, 246, 246),
       appBar: AppBar(
@@ -97,27 +98,94 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const PhotoCard(),
               const CategoryList(),
-              BlocBuilder<CategoryBloc, CategoryState>(
-                builder: (BuildContext context, CategoryState state) {
-                  if (state is CategoryLoaded) {
-                    return NotesPinList(categories: state.categories);
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
+
+              // Craduri de facut
+              StaggeredGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                children: <Widget>[
+                  SizedBox(
+                    height: halfScreenHeight,
+                    child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'TODO List',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text('✔ Cumpără lapte'),
+                            Text('✔ Trimite email'),
+                            Text('❌ Fă backup'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: halfScreenHeight,
+                    child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Starea zilei',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text('😊 Astăzi te simți bine!'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
+              const SizedBox(height: 24),
+
+              // 🔹 Lista de notițe pin
+              // BlocBuilder<CategoryBloc, CategoryState>(
+              //   builder: (BuildContext context, CategoryState state) {
+              //     if (state is CategoryLoaded) {
+              //       return NotesPinList(categories: state.categories);
+              //     } else {
+              //       return const Center(child: CircularProgressIndicator());
+              //     }
+              //   },
+              // ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateToAddNote(),
+        onPressed: _navigateToAddNote,
         backgroundColor: Colors.black,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 30, color: Colors.white),
