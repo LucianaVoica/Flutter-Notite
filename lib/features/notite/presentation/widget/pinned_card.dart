@@ -13,29 +13,25 @@ class PinnedCard extends StatelessWidget {
   final NoteModel note;
   final List<CategoryModel> categories;
 
-  Color getCategoryColor(BuildContext context, String categoryName) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+  Widget getCategoryImage(String categoryName) {
     final String name = categoryName.toLowerCase().trim();
-
     switch (name) {
-      case 'all':
-        return colorScheme.primary;
       case 'work':
-        return colorScheme.primaryContainer;
+        return Image.asset('assets/images/work.png', width: 80, height: 120);
       case 'personal':
-        return colorScheme.secondaryContainer;
+        return Image.asset('assets/images/girl.png', width: 80, height: 120);
       case 'shopping':
-        return colorScheme.tertiaryContainer;
+        return Image.asset('assets/images/shop.png', width: 80, height: 120);
       case 'study':
-        return colorScheme.errorContainer;
+        return Image.asset('assets/images/study.png', width: 80, height: 120);
       default:
-        return colorScheme.primaryContainer;
+        return Image.asset('assets/images/setup.png', width: 80, height: 120);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Color baseColor = getCategoryColor(context, note.categoryName);
+    final Color baseColor = Theme.of(context).colorScheme.primaryContainer;
     final String shortenedContent =
         note.content.length > 50
             ? '${note.content.substring(0, 50)} ...'
@@ -53,7 +49,7 @@ class PinnedCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Container(
-          height: 100,
+          height: 150,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: <Color>[
@@ -71,23 +67,36 @@ class PinnedCard extends StatelessWidget {
               horizontal: 12.0,
               vertical: 8.0,
             ),
-            child: Column(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      note.categoryName,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Text(note.title),
-                const SizedBox(height: 5),
-                Text(
-                  shortenedContent,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                getCategoryImage(note.categoryName),
+                const SizedBox(width: 12),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Chip(
+                        label: Text(
+                          note.categoryName,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        padding: EdgeInsets.zero,
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                        shape: const StadiumBorder(),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(note.title),
+                      const SizedBox(height: 5),
+                      Text(
+                        shortenedContent,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

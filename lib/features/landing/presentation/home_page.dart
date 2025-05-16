@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../core/widgets/avatar.dart';
 import '../../categories/data/models/category_model.dart';
@@ -11,8 +12,12 @@ import '../../categories/presentation/pages/category_list.dart';
 import '../../categories/presentation/widget/add_category_form.dart';
 import '../../notite/presentation/bloc/note_bloc.dart';
 import '../../notite/presentation/bloc/note_event.dart';
+import '../../notite/presentation/pages/notepin_list.dart';
 import '../../notite/presentation/widget/add_note_form.dart';
-import '../widget/photo_card.dart';
+import '../../stare/presentation/pages/detalii_stare.dart';
+import '../../stare/presentation/pages/starea_zilei.dart';
+import '../widget/pinned_card.dart';
+import '../widget/reminder_card.dart';
 import '../widget/search_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -78,17 +83,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double halfScreenHeight = MediaQuery.of(context).size.height * 0.25;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 247, 246, 246),
       appBar: AppBar(
         centerTitle: false,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: const SearchCard(),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.folder, size: 28, color: Colors.white),
+            icon: const Icon(Icons.folder, size: 28, color: Colors.black),
             onPressed: () => _showAddCategoryModal(context),
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -102,19 +105,50 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const PhotoCard(),
+              Row(
+                children: <Widget>[
+                  SvgPicture.asset('assets/svg/trei.svg', height: 110),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Notes',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
               const CategoryList(),
+              const ReminderCard(),
+              const SizedBox(height: 5),
+              // BlocBuilder<CategoryBloc, CategoryState>(
+              //   builder: (BuildContext context, CategoryState state) {
+              //     if (state is CategoryLoaded) {
+              //       return NotesPinList(categories: state.categories);
+              //     } else {
+              //       return const Center(child: CircularProgressIndicator());
+              //     }
+              //   },
+              // ),
 
               // Craduri de facut
               StaggeredGrid.count(
-                crossAxisCount: 2,
+                crossAxisCount: 4,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
                 children: <Widget>[
-                  SizedBox(
-                    height: halfScreenHeight,
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 3,
                     child: Card(
                       elevation: 2,
+                      color: Theme.of(context).colorScheme.secondaryFixed,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -133,53 +167,57 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(height: 8),
                             Text('✔ Cumpără lapte'),
                             Text('✔ Trimite email'),
-                            Text('❌ Fă backup'),
+                            Text(' Fă backup'),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: halfScreenHeight,
-                    child: Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Starea zilei',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 1.5,
+                    child: StareaZilei(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                            builder: (_) => const DetaliiStare(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 1.5,
+                    child: PinnedNotes(
+                      onTap: () {
+                        final CategoryState state =
+                            context.read<CategoryBloc>().state;
+                        if (state is CategoryLoaded) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<dynamic>(
+                              builder:
+                                  (_) => NotesPinList(
+                                    categories: state.categories,
+                                  ),
                             ),
-                            SizedBox(height: 8),
-                            Text('😊 Astăzi te simți bine!'),
-                          ],
-                        ),
-                      ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Categoriile nu sunt încărcate.'),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],
               ),
 
               const SizedBox(height: 24),
-
-              // 🔹 Lista de notițe pin
-              // BlocBuilder<CategoryBloc, CategoryState>(
-              //   builder: (BuildContext context, CategoryState state) {
-              //     if (state is CategoryLoaded) {
-              //       return NotesPinList(categories: state.categories);
-              //     } else {
-              //       return const Center(child: CircularProgressIndicator());
-              //     }
-              //   },
-              // ),
             ],
           ),
         ),

@@ -68,7 +68,6 @@ class SupabaseService {
   }
 
   //Note
-
   static Future<List<NoteModel>> loadNotes(String categoryId) async {
     final List<Map<String, dynamic>> notesData = await supabaseClient
         .from('notes')
@@ -82,19 +81,26 @@ class SupabaseService {
         content: note['content'].toString(),
         categoryId: note['category_id'].toString(),
         categoryName: note['category_name'].toString(),
-        isPinned: note['isPinned'] as bool,
+        isPinned: note['isPinned'] == false,
       );
     }).toList();
   }
 
   static Future<void> addNote(NoteModel note) async {
-    await supabaseClient.from('notes').insert(<String, dynamic>{
-      'title': note.title,
-      'content': note.content,
-      'category_id': note.categoryId,
-      'category_name': note.categoryName,
-      'isPinned': note.isPinned,
-    });
+    try {
+      final PostgrestList response =
+          await supabaseClient.from('notes').insert(<String, Object>{
+            'title': note.title,
+            'content': note.content,
+            'category_id': note.categoryId,
+            'category_name': note.categoryName,
+            'isPinned': note.isPinned,
+          }).select();
+
+      print('Notiță adăugată cu succes: $response');
+    } catch (error) {
+      print('Eroare la adăugare notiță: $error');
+    }
   }
 
   static Future<void> updateNote(NoteModel note) async {

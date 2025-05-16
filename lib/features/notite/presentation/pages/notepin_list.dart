@@ -27,24 +27,20 @@ class NotesPinList extends StatelessWidget {
             return const SizedBox();
           }
 
-          return ExpansionTile(
-            title: Row(
-              children: <Widget>[
-                const Icon(Icons.push_pin),
-                Text('Pinned', style: Theme.of(context).textTheme.bodyMedium),
-              ],
+          return SizedBox(
+            height: 170,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: pinnedNotes.length,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              itemBuilder: (BuildContext context, int index) {
+                final NoteModel note = pinnedNotes[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: PinnedCard(note: note, categories: categories),
+                );
+              },
             ),
-            children: <Widget>[
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: pinnedNotes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final NoteModel note = pinnedNotes[index];
-                  return PinnedCard(note: note, categories: categories);
-                },
-              ),
-            ],
           );
         }
 

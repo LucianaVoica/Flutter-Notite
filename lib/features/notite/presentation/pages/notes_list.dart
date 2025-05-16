@@ -34,7 +34,9 @@ class ListaNotite extends StatelessWidget {
     context.read<NoteBloc>().add(LoadNotes(categoryId: categoryType));
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.secondary),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocBuilder<NoteBloc, NoteState>(
         builder: (BuildContext context, NoteState state) {
